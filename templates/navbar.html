@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}" style="font-size: 30px;font-weight: bold">الحقوني</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page"href="{% url 'home' %}"><i class="fas fa-home"></i>&nbsp;الرئيسيه</a>
+        </li>
+{#        <li class="nav-item">#}
+{#          <a class="nav-link" href="{% url 'register_new_phone' %}">تسجيل بلاغ سرقة هاتف</a>#}
+{#        </li>#}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'instructions' %}">تعليمات الاستخدام</a>
+        </li>
+
+        {% if not request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link btn btn-success btn-sm mb-2" href="{% url 'login' %}" style="border-radius: 20px">تسجيل دخول&nbsp;<i class="fas fa-sign-in-alt" style="font-size: 12px"></i></a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link btn btn-outline-primary btn-sm" href="{% url 'sign_up' %}" style="border-radius: 20px">حساب جديد&nbsp;<i class="fas fa-user-plus" style="font-size: 12px"></i></a>
+        </li>
+        {% else %}
+        <li class="nav-item dropdown text-left">
+          <a class="nav-link dropdown-toggle btn btn-outline-info" style="color: #eeeeee;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            مرحبا {{ request.user.full_name }}
+          </a>
+          <ul class="dropdown-menu bg-dark text-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item text-white" href="{% url 'profile' %}" style="text-align: center">الحساب الشخصي</a></li>
+            <li><a class="dropdown-item text-white" href="{% url 'users_update_profile' %}" style="text-align: center">تحديث البيانات الشخصيه</a></li>
+            <li><a class="dropdown-item text-white" href="{% url 'change_password' %}" style="text-align: center">تغيير كلمة المرور</a></li>
+            <li><hr class="dropdown-divider text-white"></li>
+            <li><a class="dropdown-item text-white" href="{% url 'logout' %}" style="text-align: center">تسجيل خروج</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

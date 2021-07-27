@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container mt-5 mb-5">
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                    <h4{% if message.tags %} class="{{ message.tags }} alert alert-success p-1" style="text-align: center;" {% endif %}>{{ message }}</h4>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12">
+                {% if personal_info.personal_img %}
+                 <div class="icon-profile">
+                    <img src="{{ personal_info.personal_img.url }}" alt="" class="img-responsive img-thumbnail rounded-circle">
+                </div>
+                {% else %}
+                <div class="icon-profile">
+                    <img src="{% static 'img/avatar.png' %}" alt="" class="img-responsive img-thumbnail rounded-circle">
+                </div>
+                {% endif %}
+                <h2 class="title-profile">مرحبا ' {{ personal_info.full_name }} '</h2>
+{#                <p class="content-email"><i class="fas fa-envelope" style="margin-left: 10px"></i>{{ personal_info.email }}</p>#}
+                {% if request.user.personal_phone %}
+                <div class="text-center personal-info-profile">
+                    <ul style="list-style: none">
+                        <li>
+                            <i class="fas fa-mobile-alt text-muted" style="margin-left: 10px"></i>
+                            <span class="main-label text-muted">الهاتف</span>
+                            <span class="content-label">{{ personal_info.personal_phone }}</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt text-muted" style="margin-left: 10px"></i>
+                            <span class="main-label text-muted">الدوله</span>
+                            <span class="content-label">{{ personal_info.country }}</span>
+                        </li>
+
+                        <li>
+                            <i class="fas fa-venus-double text-muted" style="margin-left: 10px"></i>
+                            <span class="main-label text-muted">النوع</span>
+                            <span class="content-label">{{ personal_info.gender }}</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-birthday-cake text-muted" style="margin-left: 10px"></i>
+                            <span class="main-label text-muted">العمر</span>
+                            <span class="content-label">{{ personal_info.age }} عام</span>
+                        </li>
+                    </ul>
+                </div>
+                <p class="content-profile">هذه هي صفحتك الشخصيه، ومسجل بها كل البيانات الخاصه بك ، وايضا كل البلاغات المقدمه منك على الموقع
+                <br> ويمكنك ايضا عرض تفاصيل البلاغ والتعديل عليه وحذفه</p>
+                {% else %}
+                <p class="content-profile">من فضلك استكمل بياناتك من خلال <a href="{% url 'users_update_profile' %}" style="color: red;font-weight: bold">تحديث البيانات</a> حتي تستطيع تسجيل بلاغك بنجاح</p>
+                <p class="text-center">بعد تحديث بياناتك، تستطيع ادارة كل بلاغاتك من خلال حسابك الشخصي لدينا، سواء عرض تفاصيل البلاغ او التعديل عليه او حتي حذفه
+                {% endif %}
+                <div class="text-center">
+                    {% if request.user.personal_phone and request.user.country and request.user.age and request.user.gender %}
+{#                    <a class="btn btn-primary mt-3" href="{% url 'change_password' %}" style="text-decoration: none">تحديث كلمة المرور</a>#}
+                    <a class="btn btn-danger mt-3" href="{% url 'register_new_phone' %}" style="text-decoration: none">تسجيل بلاغ سرقة هاتف</a>
+{#                    <a class="btn btn-success mt-3" href="{% url 'users_update_profile' %}" style="text-decoration: none">تحديث البيانات</a>#}
+                    {% else %}
+                    <a class="btn btn-success mt-3" href="{% url 'users_update_profile' %}" style="text-decoration: none">تحديث بياناتي</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <hr class="text-muted" style="margin: 20px 300px 30px 300px;">
+
+        <h2 class="title-profile" style="margin: 80px 0 0 0;text-align: right;padding-right: 30px">بلاغات فقد الهواتف</h2>
+        <div class="row mb-3">
+            <div class="col-12">
+                {% if all_data %}
+                <div class="mt-5 mb-5">
+                    <table class="text-center table-report-detail">
+                          <thead class="">
+
+                              <th scope="col">رقم البلاغ</th>
+                              <th scope="col">مقدم البلاغ</th>
+                              <th scope="col">تاريخ البلاغ</th>
+                              <th scope="col">حالة البلاغ</th>
+                              <th scope="col">تاريخ نشر البلاغ</th>
+                              <th scope="col">استرجاع الهاتف</th>
+                              <th scope="col">تاريخ الاسترجاع</th>
+                              <th scope="col">تفاصيل البلاغ</th>
+                              <th scope="col">حذف البلاغ</th>
+
+                          </thead>
+
+                          <tbody>
+                          {% for info in all_data %}
+                            <tr>
+                              <td data-label='رقم البلاغ'>{{ info.report_id }}</td>
+                              <td data-label='مقدم البلاغ'>{{ info.owner_name }}</td>
+                              <td data-label='تاريخ البلاغ'>{{ info.Date_of_register|date:"d - M - Y" }}</td>
+                              {% if info.is_published %}
+                                  <td data-label='حالة البلاغ' class="text-success">تم نشر البلاغ</td>
+                                  <td data-label='تاريخ نشر البلاغ' class="text-success">{{ info.published_date|date:"d - M - Y" }}</td>
+                                  {% if info.is_return %}
+                                      <td data-label='استرجاع الهاتف' class="text-success">تم استرجاع الهاتف</td>
+                                      <td data-label='تاريخ الاسترجاع' class="text-success">{{ info.is_return_date|date:"d - M - Y" }}</td>
+                                  {% else %}
+                                      <td data-label='استرجاع الهاتف' class="text-danger">مازال قيد البحث</td>
+                                      <td data-label='تاريخ الاسترجاع' class="text-danger">-</td>
+                                  {% endif %}
+                              <td data-label='تفاصيل البلاغ'><a href="{% url 'report_detail' info.slug %}" class="btn btn-success btn-sm" style="text-decoration: none;">عرض التفاصيل</a></td>
+                              {% else %}
+
+                                  <td data-label='حالة البلاغ' class="text-danger">قيد المراجعه</td>
+                                  <td data-label='تاريخ نشر البلاغ' class="text-danger">-</td>
+                                  <td data-label='استرجاع الهاتف' class="text-danger">مازال قيد البحث</td>
+                                  <td data-label='تاريخ الاسترجاع' class="text-danger">-</td>
+                                  <td data-label='تفاصيل البلاغ' class="text-danger">-</td>
+                              {% endif %}
+                              <td data-label='حذف البلاغ'><a href="{% url 'delete_report' info.slug %}" class="btn btn-danger btn-sm" style="text-decoration: none;">حذف البلاغ</a></td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                    </table>
+                    <div class="text-center mt-5" style="margin: 0 30px">
+                         <small class="text-muted">برجاء عند استرجاع هاتفك نرجو <b>تعديل البلاغ</b> ووضع علامة انك استرجعت هاتفك، ليتم حفظ بلاغك فى قواعد البيانات
+                         <br>وذلك بالدخول على تفاصيل البلاغ، ومنها الى تعديل البلاغ</small>
+                    </div>
+                </div>
+                 {% else %}
+                    <h4 class="text-center mt-5 font-weight-bold">لا يوجد اى بلاغات مقدمة منك حتى الان</h4>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr class="text-muted" style="margin-top: 50px">
+        <div class="text-center" style="margin: 0 50px">
+             <small class="" style="text-align: center;">ملحوظه : الموقع يقوم بحذف البلاغات التي مر على انشائها 120 يوم</small>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container mt-5 mb-5">
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                    <h3{% if message.tags %} class="{{ message.tags }} alert alert-success p-2" style="text-align: center;" {% endif %}>{{ message }}</h3>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12">
+                <h2 class="title-profile">تفاصيل البلاغ</h2>
+                <p class="content-profile">ستجد هنا جميع التفاصيل الخاصه بالبلاغ المقدم منك ، وايضا يمكنك التعديل عليه فى حال ورد خطأ داخل البلاغ</p>
+                <div class="text-center">
+                    <a class="btn btn-success mt-3" href="{% url 'profile' %}" style="text-decoration: none">صفحتى الشخصيه</a>
+                    <a class="btn btn-secondary mt-3" href="{% url 'home' %}" style="text-decoration: none">الرئيسيه</a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="text-muted" style="margin: 20px 300px">
+
+        <div class="row mt-5">
+            <div class="col-12">
+                {% if report %}
+                    <table class="table-report-detail">
+                          <thead>
+
+                              <th>رقم البلاغ</th>
+                              <th>اسم المبلغ</th>
+                              <th>ايميل المبلغ</th>
+                              <th>رقم للتواصل</th>
+                              <th>نوع التلفون</th>
+                              <th>رقم ال IMEI</th>
+                              <th>بلد الفقد</th>
+                              <th>منطقة الفقد</th>
+                              <th>تاريخ الفقد</th>
+                              <th>تاريخ تقديم البلاغ</th>
+                              <th>استرجاع الهاتف</th>
+                              <th>تاريخ الاسترجاع</th>
+
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td data-label="رقم البلاغ :">{{ report.report_id }}</td>
+                              <td data-label="اسم المبلغ :">{{ report.owner_name }}</td>
+                              <td data-label="ايميل المبلغ :">{{ report.owner_mail }}</td>
+                              <td data-label="رقم للتواصل :">{{ report.communication_number }}</td>
+                              <td data-label="نوع التلفون :">{{ report.type_of_phone }}</td>
+                              <td data-label="رقم ال IMEI :">{{ report.serial_number_of_phone }}</td>
+                              <td data-label="بلد الفقد :">{{ report.name_of_state }}</td>
+                              <td data-label="منطقة الفقد :">{{ report.place_of_thift }}</td>
+                              <td data-label="تاريخ الفقد :">{{ report.Date_of_thift|date:"d - M - Y" }}</td>
+                              <td data-label="تاريخ تقديم البلاغ :">{{ report.Date_of_register|date:"d - M - Y" }}</td>
+                              {% if report.is_return %}
+                              <td data-label="استرجاع الهاتف :" class="text-success">تم استرجاع الهاتف</td>
+                              <td data-label="تاريخ الاسترجاع :" class="text-success">{{ report.is_return_date|date:"d - M - Y" }}</td>
+                              {% else %}
+                              <td data-label="استرجاع الهاتف :" class="text-danger">مازال قيد البحث</td>
+                              <td data-label="تاريخ الاسترجاع :" class="text-danger">-</td>
+                              {% endif %}
+                            </tr>
+                          </tbody>
+                        </table>
+                {% else %}
+                    <h4 class="alert alert-success p-2 text-center mt-5 mb-5">لا يوجد اى بلاغات مقدمة منك حتى الان</h4>
+                {% endif %}
+            </div>
+
+            <div class="text-center">
+                {% if report.owner_mail == request.user %}
+                 <a class="btn btn-danger mt-3" href="{% url 'update_report' report.slug %}" style="text-decoration: none">تعديل البلاغ</a>
+                 {% endif %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

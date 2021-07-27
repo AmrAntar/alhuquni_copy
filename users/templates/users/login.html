@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block nav %}{% endblock %}
+
+
+{% block content %}
+
+    <div class="full-image">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                     <div class="register">
+                        <h2>تسجيل دخول</h2>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <p{% if message.tags %} class="{{ message.tags }} text-success" style="text-align: center;font-weight: bold" {% endif %}>{{ message }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        <form action="" method="post" novalidate>
+                            {% csrf_token %}
+                                {{ form|crispy }}
+                            <input type="submit" value="دخول">
+{#                            <a href="{% url 'password_reset' %}" class="">نسيت كلمة المرور ؟ </a>#}
+                            <a href="{% url 'request_reset_email' %}" class="">نسيت كلمة المرور ؟ </a>
+                            <a href="{% url 'sign_up' %}" class="">تسجيل جديد</a>
+                            <a href="{% url 'home' %}" class="text-success">عوده للرئيسيه</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block footer %}{% endblock %}
+

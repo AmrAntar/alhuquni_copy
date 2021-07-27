@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block nav %}{% endblock %}
+
+
+{% block content %}
+
+    <div class="full-image">
+        <div class="container">
+             <div class="register">
+                <h2>تسجيل جديد</h2>
+{#                 {% if form.errors %}#}
+{#                    {% for field in form %}#}
+{#                        {% for error in field.errors %}#}
+{#                            <p class="text-danger text-center" style="line-height: 1.1">#}
+{#                                <strong>{{ error|escape }}</strong>#}
+{#                            </p>#}
+{#                        {% endfor %}#}
+{#                    {% endfor %}#}
+{#                {% endif %}#}
+
+                {% if messages %}
+                 {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }} text-success" style="text-align: center;font-weight: bold" {% endif %}>{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+{#                    {{ form.full_name }}#}
+{#                    {{ form.email }}#}
+{#                    {{ form.password1 }}#}
+{#                    {{ form.password2 }}#}
+                      {{ form|crispy }}
+                    <input type="submit" value="تسجيل">
+                    <a href="{% url 'login' %}" class="">لدي حساب بالفعل</a>
+                    {% if field.help_text %}
+                        <div style="color: #fff">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                    <input type="text" id="mobile" name="mobile" style="visibility: hidden">
+                    <input type="text" id="desktop" name="desktop" style="visibility: hidden">
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block footer %}{% endblock %}
+

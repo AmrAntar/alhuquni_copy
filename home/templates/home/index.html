@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    <title>الحقوني | الرئيسيه</title>
+{% endblock %}
+
+
+{% block content %}
+<main>
+    {% if messages %}
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                    <h3{% if message.tags %} class="{{ message.tags }} alert alert-success p-2" style="text-align: center;" {% endif %}>{{ message }}</h3>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+     <div class="container">
+        <div class="row" style="margin-top: 100px">
+            <div class="col-12 text-center" style="border-bottom: 3px solid red;padding-bottom: 20px">
+                <div class="">
+                     <h1 class="" style="font-weight: bold;margin-bottom: 30px;">الحقوني</h1>
+                     <h4 class="" style="font-size: 18px;font-weight: 600">الموقع الاول للبحث عن الهواتف المفقوده</h4>
+                     <p class="text-muted" style="font-size: 18px;font-weight: 600">سجل الان معنا .. وانضم لاكبر قاعدة بيانات ، واجعل فرص استرجاع هاتفك المفقود حقيقيه معنا</p>
+                      <hr class="my-4">
+                     <div class="pt-3" style="margin-bottom: 100px">
+                        <a href="{% url 'instructions' %}" class="btn btn-blue waves-effect" style="text-decoration: none;font-weight: bold">تعليمات الاستخدام <i class="fab fa-readme"></i></a>
+                        <a href="{% url 'sign_up' %}" class="btn btn-outline-primary waves-effect" style="text-decoration: none;font-weight: bold">سجل الان <i class="fas fa-sign-in-alt" style="font-size: 12px"></i></a>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+
+{#        <h2 class="title-phone text-center ehsaa">احصائيات الموقع</h2>#}
+
+        <div class="row mt-5 text-center">
+            <div class="col-lg-4 col-md-12 col-sm-12 counter-box">
+                <div class="icon-box">
+                    <i class="fas fa-mobile-alt icon-same-css"></i>
+                    <p class="counter" data-target="3495">0</p>
+                    <p>سرقة هاتف</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12 counter-box">
+                <div class="icon-box">
+                    <i class="fas fa-search icon-same-css"></i>
+                    <p class="counter" data-target="10682">0</p>
+                    <p>عملية بحث</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12 col-sm-12 counter-box">
+                <div class="icon-box">
+                    <i class="fas fa-user-edit icon-same-css"></i>
+                    <p class="counter" data-target="4500">0</p>
+                    <p>تسجيل جديد</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-info">
+        <h4>اقرأ اولا <a href="{% url 'instructions' %}">التعليمات</a> جيدا قبل استخدام الموقع</h4>
+        <h1>ابحث برقم ال IMEI الخاص بالهاتف المفقود</h1>
+        <p>( فى حالة وجود اي بيانات لدينا خاصه بهذا الهاتف ، سوف تظهر لك كاملة )</p>
+    </div>
+
+    <div class="wrap">
+        <form class="search" method="get">
+           <input type="text" class="searchTerm" placeholder="بحث برقم ال IMEI" name="q" value="{{ request.GET.q }}" required maxlength="15" onkeypress="isInputNumber(event)">
+           <button type="submit" class="searchButton">
+            <i class="fa fa-search"></i>
+         </button>
+        </form>
+     </div>
+
+    <div class="container">
+        {% if all_phone %}
+            {% if query %}
+               {% for phone in all_phone %}
+                  {% if phone.is_published %}
+                    <table class="table-report-detail mt-5 mb-3">
+                      <thead>
+
+                          <th scope="col">مقدم البلاغ</th>
+                          <th scope="col">ايميل المبلغ</th>
+                          <th scope="col">رقم للتواصل</th>
+                          <th scope="col">نوع التلفون</th>
+                          <th scope="col">رقم ال IMEI</th>
+                          <th scope="col">بلد الفقد</th>
+                          <th scope="col">منطقة الفقد</th>
+                          <th scope="col">تاريخ الفقد</th>
+                          <th scope="col">استرجاع الهاتف</th>
+                          <th scope="col">تاريخ الاسترجاع</th>
+
+                      </thead>
+
+                      <tbody>
+                        <tr>
+                          <td data-label="مقدم البلاغ :">{{ phone.owner_name }}</td>
+                          <td data-label="ايميل المبلغ :">{{ phone.owner_mail }}</td>
+                          <td data-label="رقم للتواصل :">{{ phone.communication_number }}</td>
+                          <td data-label="نوع التلفون :">{{ phone.type_of_phone }}</td>
+                          <td data-label="رقم الIMEI :">{{ phone.serial_number_of_phone }}</td>
+                          <td data-label="بلد الفقد :">{{ phone.name_of_state }}</td>
+                          <td data-label="منطقة الفقد :">{{ phone.place_of_thift }}</td>
+                          <td data-label="تاريخ الفقد :">{{ phone.Date_of_thift|date:"d - M - Y" }}</td>
+
+                          {% if phone.is_return %}
+                          <td data-label="استرجاع الهاتف :" class="text-success">تم استرجاع الهاتف</td>
+                          <td data-label="تاريخ الاسترجاع :" class="text-success">{{ phone.is_return_date|date:"d - M - Y" }}</td>
+                          {% else %}
+                          <td data-label="استرجاع الهاتف :" class="text-danger">مازال قيد البحث</td>
+                          <td data-label="تاريخ الاسترجاع :" class="text-danger">-</td>
+                          {% endif %}
+                        </tr>
+                      </tbody>
+                    </table>
+                  {% endif %}
+               {% endfor %}
+            {% endif %}
+        {% else %}
+            <h4 class="alert alert-danger p-2 text-center mt-5 mb-5">عفوا لايوجد اى بيانات خاصه بهذا الهاتف </h4>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

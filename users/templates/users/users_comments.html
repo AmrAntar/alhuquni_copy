@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{#{% block nav %}{% endblock %}#}
+
+
+{% block content %}
+
+
+        <div class="container">
+            <h4 class="title-comment mt-5">ننظر الى ارائكم بكل دقه واهتمام، شارك تجربتك مع موقع <b>الحقوني</b>...</h4>
+            <div class="register" style="max-width: 100%;padding: 10px 15px;">
+                <h2>اراء وتعليقات</h2>
+{#                 {% if form.errors %}#}
+{#                    {% for field in form %}#}
+{#                        {% for error in field.errors %}#}
+{#                            <p class="text-danger text-center" style="line-height: 1.1">#}
+{#                                <strong>{{ error|escape }}</strong>#}
+{#                            </p>#}
+{#                        {% endfor %}#}
+{#                    {% endfor %}#}
+{#                {% endif %}#}
+
+                {% if messages %}
+                 {% for message in messages %}
+                    <p{% if message.tags %} class="{{ message.tags }} text-success" style="text-align: center;font-weight: bold" {% endif %}>{{ message }}</p>
+                {% endfor %}
+                {% endif %}
+
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                      {{ form|crispy }}
+                    <input type="submit" value="نشر">
+                    {% if field.help_text %}
+                        <div style="color: #fff">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                </form>
+            </div>
+            <hr>
+
+
+            <div class="" style="margin-top: 100px;border-bottom: 3px solid red;padding-bottom: 10px">
+                    <h3 class="d-inline" style="font-weight: bold;">التعليقات</h3>
+                    <span style="padding-right: 10px;display: inline-block;font-weight: bold">({{ comments.count }}) تعليق </span>
+{#                    <small class="d-block">يظهر فقط اخر 30 تعليق من اجمالى التعليقات</small>#}
+             </div>
+            {% if comments %}
+                {% for comment in comments|slice:':30' %}
+                <div class="comments" style="">
+                    <div class="icon-comment">
+                        {% if comment.email.personal_img %}
+                        <img src="{{ comment.email.personal_img.url }}" alt="" class="img-responsive img-thumbnail rounded-circle">
+                        {% else %}
+                        <img src="{% static 'img/avatar.png' %}" alt="" class="img-responsive img-thumbnail rounded-circle">
+                        {% endif %}
+                    </div>
+                    <div class="content-info-comment">
+                        <p class="font-weight-bold">
+                            {{ comment.email.full_name }}
+                        <span class="text-muted font-weight-normal d-block">
+                            <i class="far fa-clock"></i>&nbsp; منذ {{ comment.created_at| timesince }}
+                        </span>
+                        </p>
+                    </div>
+                    {{ comment.content | linebreaks }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+{% endblock %}
+
+
+
+{#{% block footer %}{% endblock %}#}
+

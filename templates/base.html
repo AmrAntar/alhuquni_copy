@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'img/my-site-icon.ico' %}">
+
+    {% block title %}
+    <title></title>
+    {% endblock %}
+</head>
+<body>
+
+{#          Facebook Plugin  #}
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ar_AR/sdk.js#xfbml=1&version=v10.0&appId=225621602609604&autoLogAppEvents=1" nonce="vImYHj2v"></script>
+
+
+    {% block nav %}
+        <header>
+        {% include 'navbar.html' %}
+        </header>
+    {% endblock %}
+
+    
+    
+    {% block content %}{% endblock %}
+
+
+
+    {% block footer %}
+      <div class="footer">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h4 class="logo-text">الحقوني</h4>
+                <p>موقع يهتم بالقضاء على ظاهرة سرقة الهواتف المحموله، او فقدها بشكل عام، كل ماعليك هو تسجيلك لبيانات هاتفك المفقود، والانتظار لحين الاتصال بك</p>
+                <div class="contact">
+                    <span><i class="fas fa-phone"></i>&nbsp;01028634832</span>
+                    <span><i class="fas fa-envelope"></i>&nbsp;amr4antar@gmail.com</span>
+                </div>
+                <div class="footer-socials">
+                  <a href="#"><i class="fab fa-youtube"></i></a>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="https://www.facebook.com/profile.php?id=100007377310740"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="footer-section links">
+                <h4>روابط هامه</h4>
+                <br>
+                <ul>
+                    <a href="{% url 'privacy' %}"><li>سياسه الخصوصيه</li></a>
+                    <a href="{% url 'contact_us' %}"><li>اتصل بنا</li></a>
+                    <a href="{% url 'users_comments' %}"><li>اراء وتعليقات</li></a>
+                    <a href="{% url 'instructions' %}"><li>تعليمات الاستخدام</li></a>
+                </ul>
+            </div>
+            <div class="footer-section contact-form">
+                <h4>شارك صفحتنا</h4>
+                <div class="fb-page mt-4" data-href="https://www.facebook.com/profile.php?id=100007377310740" data-tabs="" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/profile.php?id=100007377310740" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/profile.php?id=100007377310740">‏عمرو عنتر‏</a></blockquote></div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>كل الحقوق محفوظه &copy; 2021 لصالح موقع الحقوني ، تصميم وبرمجه <span>Amr Antar</span></p>
+        </div>
+       </div>
+    {% endblock %}
+
+
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+
+        counters.forEach(counter =>{
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+
+                const inc = target / speed;
+
+                if(count < target){
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 1)
+                }else {
+                    count.innerText = target;
+                }
+            }
+            updateCount()
+        });
+     </script>
+
+</body>
+</html>
